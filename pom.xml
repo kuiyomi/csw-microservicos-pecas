@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- Spring Boot Starter Parent como base para gerenciamento de dependências e plugins -->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.2.5</version>
+        <relativePath/> <!-- Busca no repositório Maven -->
+    </parent>
+
+    <groupId>com.sistemapecas</groupId>
+    <artifactId>microservicos-pecas</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <name>microservicos-pecas</name>
+    <description>Projeto Multi-Módulo de Microserviços para Gestão de Peças automotivas</description>
+
+    <!-- Definição dos 6 módulos do sistema de microserviços -->
+    <modules>
+        <module>config-server</module>
+        <module>eureka-server</module>
+        <module>gateway</module>
+        <module>pecas-service</module>
+        <module>clientes-service</module>
+        <module>representantes-service</module>
+    </modules>
+
+    <properties>
+        <!-- Configuração de versão do Java (Java 17) -->
+        <java.version>17</java.version>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <!-- Versão compatível do Spring Cloud (2023.x) para Spring Boot 3.2.x -->
+        <spring-cloud.version>2023.0.3</spring-cloud.version>
+    </properties>
+
+    <!-- Gerenciamento das dependências do ecossistema Spring Cloud -->
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <!-- Plugin do Spring Boot para empacotamento executável dos serviços -->
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+</project>

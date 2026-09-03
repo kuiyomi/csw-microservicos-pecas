@@ -1,0 +1,37 @@
+server:
+  port: 8083
+
+spring:
+  application:
+    name: representantes-service
+  datasource:
+    # Banco de dados em memoria H2 com persistencia enquanto a JVM estiver ativa
+    url: jdbc:h2:mem:representantesdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  h2:
+    console:
+      # Console web do H2 disponivel para consultas em /h2-console
+      enabled: true
+      path: /h2-console
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+# Exposicao dos endpoints de monitoramento
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info

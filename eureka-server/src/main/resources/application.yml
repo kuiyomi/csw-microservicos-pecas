@@ -1,0 +1,23 @@
+server:
+  port: 8761
+
+spring:
+  application:
+    name: eureka-server
+
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    # O Eureka Server e o proprio registro, portanto nao precisa se registrar nele mesmo nem sincronizar
+    register-with-eureka: false
+    fetch-registry: false
+    service-url:
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+
+# Exposicao dos endpoints de monitoramento
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info

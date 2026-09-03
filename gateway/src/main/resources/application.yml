@@ -1,0 +1,25 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          # Roteamento automatico baseado no nome dos servicos registrados no Eureka (/pecas-service/**, /clientes-service/**, etc.)
+          enabled: true
+          lower-case-service-id: true
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+# Exposicao dos endpoints de monitoramento
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, gateway
