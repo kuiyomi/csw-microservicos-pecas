@@ -12,11 +12,17 @@ eureka:
   instance:
     hostname: localhost
   client:
-    # O Eureka Server e o proprio registro, portanto nao se registra nem busca registro
+    # Servidor standalone: o Eureka Server e o proprio registro, sem replicacao de peers
     register-with-eureka: false
     fetch-registry: false
     service-url:
       defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+  server:
+    # Desativa auto-preservacao para ambiente de desenvolvimento
+    enable-self-preservation: false
+  dashboard:
+    # Dashboard web do Eureka ativado em http://localhost:8761/
+    enabled: true
 
 # Endpoints de monitoramento e integridade
 management:

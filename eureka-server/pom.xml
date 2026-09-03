@@ -21,6 +21,12 @@
             <artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
         </dependency>
 
+        <!-- Cliente Spring Cloud Config para buscar configurações centralizadas no config-server -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-config</artifactId>
+        </dependency>
+
         <!-- Monitoramento e métricas de integridade (health check) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

@@ -1,23 +1,14 @@
-server:
-  port: 8761
-
+# ==============================================================================
+# Eureka Server - Servidor de Descoberta e Registro (Netflix Eureka)
+# ==============================================================================
+# As configuracoes completas deste servico (porta 8761, dashboard habilitado,
+# desativacao de replicacao de peers / eureka client) sao obtidas diretamente
+# do Config Server. O Config Server deve ser iniciado previamente.
+# ==============================================================================
 spring:
   application:
     name: eureka-server
+  config:
+    # Importa configuracoes do Spring Cloud Config Server na porta padrao 8888
+    import: "optional:configserver:http://localhost:8888"
 
-eureka:
-  instance:
-    hostname: localhost
-  client:
-    # O Eureka Server e o proprio registro, portanto nao precisa se registrar nele mesmo nem sincronizar
-    register-with-eureka: false
-    fetch-registry: false
-    service-url:
-      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
-
-# Exposicao dos endpoints de monitoramento
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health, info
