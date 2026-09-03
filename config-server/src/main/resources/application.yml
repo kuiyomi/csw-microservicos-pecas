@@ -11,7 +11,10 @@ spring:
     config:
       server:
         native:
-          search-locations: classpath:/config
+          search-locations:
+            - file:./config-repo
+            - file:../config-repo
+            - classpath:/config-repo
 
 # Configuracao para registro opcional no Eureka
 eureka:

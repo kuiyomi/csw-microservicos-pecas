@@ -1,0 +1,29 @@
+# ==============================================================================
+# Configuracao Centralizada: API Gateway (Spring Cloud Gateway)
+# ==============================================================================
+server:
+  port: 8080
+
+spring:
+  application:
+    name: gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          # Roteamento automatico baseado no nome dos servicos registrados no Eureka
+          enabled: true
+          lower-case-service-id: true
+
+# Conexao com o Eureka Server para descoberta dos servicos
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+# Endpoints de monitoramento e integridade
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, gateway

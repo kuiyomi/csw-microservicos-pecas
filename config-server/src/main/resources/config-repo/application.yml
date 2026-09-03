@@ -1,0 +1,7 @@
+# ==============================================================================
+# Configuracoes Compartilhadas por todos os servicos do ecossistema
+# ==============================================================================
+info:
+  app:
+    name: Sistema de Gestao de Pecas
+    description: Configuracoes compartilhadas via Spring Cloud Config Server

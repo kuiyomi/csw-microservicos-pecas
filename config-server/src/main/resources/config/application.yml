@@ -1,5 +1,0 @@
-# Configuracoes compartilhadas padrão para todos os microservicos
-info:
-  app:
-    name: Sistema de Gestao de Pecas
-    description: Configuracoes compartilhadas via Spring Cloud Config Server
