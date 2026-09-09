@@ -1,0 +1,168 @@
+### ==============================================================================
+### Sistema de Microserviços de Peças - Requisições via API Gateway (Porta 8080)
+### ==============================================================================
+### Todas as requisições passam exclusivamente pelo Gateway: http://localhost:8080/api/...
+### ==============================================================================
+
+@baseUrl = http://localhost:8080
+
+### ==============================================================================
+### 1. MICROSERVIÇO DE PEÇAS (pecas-service)
+### ==============================================================================
+
+### 1.1 Cadastrar nova peça (Peça 1)
+POST {{baseUrl}}/api/pecas
+Content-Type: application/json
+
+{
+  "nroIdentificacao": "PEC-001",
+  "nome": "Pastilha de Freio Dianteira",
+  "descricao": "Pastilha de freio cerâmica para veículos leves"
+}
+
+### 1.2 Cadastrar nova peça (Peça 2)
+POST {{baseUrl}}/api/pecas
+Content-Type: application/json
+
+{
+  "nroIdentificacao": "PEC-002",
+  "nome": "Disco de Freio Ventilado",
+  "descricao": "Disco de freio dianteiro de alta performance"
+}
+
+### 1.3 Listar todas as peças
+GET {{baseUrl}}/api/pecas
+Accept: application/json
+
+### 1.4 Buscar peça por ID
+GET {{baseUrl}}/api/pecas/1
+Accept: application/json
+
+### 1.5 Buscar peças por nome parcial
+GET {{baseUrl}}/api/pecas/nome/Freio
+Accept: application/json
+
+### 1.6 Buscar peça por número de identificação único
+GET {{baseUrl}}/api/pecas/identificacao/PEC-001
+Accept: application/json
+
+### 1.7 Buscar peça por ID inexistente (Retorna 404)
+GET {{baseUrl}}/api/pecas/999
+Accept: application/json
+
+
+### ==============================================================================
+### 2. MICROSERVIÇO DE CLIENTES (clientes-service)
+### ==============================================================================
+
+### 2.1 Cadastrar novo cliente (Cliente 1)
+POST {{baseUrl}}/api/clientes
+Content-Type: application/json
+
+{
+  "cpf": "12345678901",
+  "nome": "Carlos Eduardo Silva"
+}
+
+### 2.2 Cadastrar novo cliente (Cliente 2)
+POST {{baseUrl}}/api/clientes
+Content-Type: application/json
+
+{
+  "cpf": "23456789012",
+  "nome": "Mariana Souza Oliveira"
+}
+
+### 2.3 Tentativa de cadastrar cliente com CPF duplicado (Retorna 400 Bad Request)
+POST {{baseUrl}}/api/clientes
+Content-Type: application/json
+
+{
+  "cpf": "12345678901",
+  "nome": "Carlos Silva Duplicado"
+}
+
+### 2.4 Listar todos os clientes
+GET {{baseUrl}}/api/clientes
+Accept: application/json
+
+### 2.5 Buscar cliente por ID
+GET {{baseUrl}}/api/clientes/1
+Accept: application/json
+
+### 2.6 Buscar clientes por nome parcial
+GET {{baseUrl}}/api/clientes/nome/Silva
+Accept: application/json
+
+### 2.7 Buscar cliente por CPF único
+GET {{baseUrl}}/api/clientes/cpf/12345678901
+Accept: application/json
+
+### 2.8 Buscar cliente por ID inexistente (Retorna 404)
+GET {{baseUrl}}/api/clientes/999
+Accept: application/json
+
+
+### ==============================================================================
+### 3. MICROSERVIÇO DE REPRESENTANTES (representantes-service)
+### ==============================================================================
+
+### 3.1 Cadastrar novo representante (Representante 1)
+POST {{baseUrl}}/api/representantes
+Content-Type: application/json
+
+{
+  "cpf": "98765432100",
+  "nome": "Ana Beatriz Santos"
+}
+
+### 3.2 Cadastrar novo representante (Representante 2)
+POST {{baseUrl}}/api/representantes
+Content-Type: application/json
+
+{
+  "cpf": "87654321099",
+  "nome": "Roberto Carlos de Lima"
+}
+
+### 3.3 Tentativa de cadastrar representante com CPF duplicado (Retorna 400 Bad Request)
+POST {{baseUrl}}/api/representantes
+Content-Type: application/json
+
+{
+  "cpf": "98765432100",
+  "nome": "Ana Santos Duplicada"
+}
+
+### 3.4 Listar todos os representantes
+GET {{baseUrl}}/api/representantes
+Accept: application/json
+
+### 3.5 Buscar representante por ID
+GET {{baseUrl}}/api/representantes/1
+Accept: application/json
+
+### 3.6 Buscar representantes por nome parcial
+GET {{baseUrl}}/api/representantes/nome/Santos
+Accept: application/json
+
+### 3.7 Buscar representante por CPF único
+GET {{baseUrl}}/api/representantes/cpf/98765432100
+Accept: application/json
+
+### 3.8 Buscar representante por ID inexistente (Retorna 404)
+GET {{baseUrl}}/api/representantes/999
+Accept: application/json
+
+
+### ==============================================================================
+### 4. TESTE DE ROTAS INEXISTENTES NO GATEWAY
+### ==============================================================================
+
+### 4.1 Rota inexistente sob prefixo /api (Retorna 404 Not Found do Gateway)
+GET {{baseUrl}}/api/rota-inexistente
+Accept: application/json
+
+### 4.2 Rota inexistente genérica (Retorna 404 Not Found do Gateway)
+GET {{baseUrl}}/desconhecido
+Accept: application/json

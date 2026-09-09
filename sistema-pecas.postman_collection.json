@@ -1,0 +1,268 @@
+{
+  "info": {
+    "_postman_id": "7f8b9a12-e567-4f8a-9abc-1234567890ab",
+    "name": "Sistema de Peças - Microserviços API Gateway",
+    "description": "Coleção de testes para todos os endpoints do ecossistema de microserviços acessados através do API Gateway (http://localhost:8080/api/...).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Peças (pecas-service)",
+      "item": [
+        {
+          "name": "Cadastrar Peça",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nroIdentificacao\": \"PEC-001\",\n  \"nome\": \"Pastilha de Freio Dianteira\",\n  \"descricao\": \"Pastilha de freio cerâmica para veículos leves\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/pecas",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "pecas"]
+            }
+          }
+        },
+        {
+          "name": "Listar Todas as Peças",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/pecas",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "pecas"]
+            }
+          }
+        },
+        {
+          "name": "Buscar Peça por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/pecas/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "pecas", "1"]
+            }
+          }
+        },
+        {
+          "name": "Buscar Peças por Nome Parcial",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/pecas/nome/Freio",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "pecas", "nome", "Freio"]
+            }
+          }
+        },
+        {
+          "name": "Buscar Peça por Número de Identificação",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/pecas/identificacao/PEC-001",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "pecas", "identificacao", "PEC-001"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Clientes (clientes-service)",
+      "item": [
+        {
+          "name": "Cadastrar Cliente",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cpf\": \"12345678901\",\n  \"nome\": \"Carlos Eduardo Silva\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/clientes",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "clientes"]
+            }
+          }
+        },
+        {
+          "name": "Listar Todos os Clientes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/clientes",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "clientes"]
+            }
+          }
+        },
+        {
+          "name": "Buscar Cliente por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/clientes/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "clientes", "1"]
+            }
+          }
+        },
+        {
+          "name": "Buscar Clientes por Nome Parcial",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/clientes/nome/Silva",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "clientes", "nome", "Silva"]
+            }
+          }
+        },
+        {
+          "name": "Buscar Cliente por CPF",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/clientes/cpf/12345678901",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "clientes", "cpf", "12345678901"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Representantes (representantes-service)",
+      "item": [
+        {
+          "name": "Cadastrar Representante",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cpf\": \"98765432100\",\n  \"nome\": \"Ana Beatriz Santos\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/representantes",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "representantes"]
+            }
+          }
+        },
+        {
+          "name": "Listar Todos os Representantes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/representantes",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "representantes"]
+            }
+          }
+        },
+        {
+          "name": "Buscar Representante por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/representantes/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "representantes", "1"]
+            }
+          }
+        },
+        {
+          "name": "Buscar Representantes por Nome Parcial",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/representantes/nome/Santos",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "representantes", "nome", "Santos"]
+            }
+          }
+        },
+        {
+          "name": "Buscar Representante por CPF",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/representantes/cpf/98765432100",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "representantes", "cpf", "98765432100"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Erros e Rotas Inexistentes",
+      "item": [
+        {
+          "name": "Rota Inexistente (/api/rota-inexistente)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/rota-inexistente",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "rota-inexistente"]
+            }
+          }
+        },
+        {
+          "name": "Rota Inexistente Fora do Prefixo (/rota-invalida)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/rota-invalida",
+              "host": ["{{baseUrl}}"],
+              "path": ["rota-invalida"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
