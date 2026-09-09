@@ -4,16 +4,42 @@ server:
 spring:
   application:
     name: gateway
+  config:
+    # Importa configuracoes centralizadas do Spring Cloud Config Server
+    import: "optional:configserver:http://localhost:8888"
   cloud:
     gateway:
       discovery:
         locator:
-          # Roteamento automatico baseado no nome dos servicos registrados no Eureka (/pecas-service/**, /clientes-service/**, etc.)
+          # Roteamento automatico baseado no nome dos servicos registrados no Eureka
           enabled: true
           lower-case-service-id: true
+      routes:
+        - id: pecas-service
+          uri: lb://pecas-service
+          predicates:
+            - Path=/api/pecas, /api/pecas/**
+          filters:
+            - StripPrefix=1
+        - id: clientes-service
+          uri: lb://clientes-service
+          predicates:
+            - Path=/api/clientes, /api/clientes/**
+          filters:
+            - StripPrefix=1
+        - id: representantes-service
+          uri: lb://representantes-service
+          predicates:
+            - Path=/api/representantes, /api/representantes/**
+          filters:
+            - StripPrefix=1
 
 eureka:
+  instance:
+    prefer-ip-address: true
   client:
+    register-with-eureka: true
+    fetch-registry: true
     service-url:
       defaultZone: http://localhost:8761/eureka/
 
