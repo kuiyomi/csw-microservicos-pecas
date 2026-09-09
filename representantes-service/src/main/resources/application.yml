@@ -4,6 +4,9 @@ server:
 spring:
   application:
     name: representantes-service
+  config:
+    # Importa configuracoes centralizadas do Spring Cloud Config Server
+    import: "optional:configserver:http://localhost:8888"
   datasource:
     # Banco de dados em memoria H2 com persistencia enquanto a JVM estiver ativa
     url: jdbc:h2:mem:representantesdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
