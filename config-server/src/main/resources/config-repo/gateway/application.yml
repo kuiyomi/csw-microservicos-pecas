@@ -14,10 +14,33 @@ spring:
           # Roteamento automatico baseado no nome dos servicos registrados no Eureka
           enabled: true
           lower-case-service-id: true
+      routes:
+        - id: pecas-service
+          uri: lb://pecas-service
+          predicates:
+            - Path=/api/pecas, /api/pecas/**
+          filters:
+            - StripPrefix=1
+        - id: clientes-service
+          uri: lb://clientes-service
+          predicates:
+            - Path=/api/clientes, /api/clientes/**
+          filters:
+            - StripPrefix=1
+        - id: representantes-service
+          uri: lb://representantes-service
+          predicates:
+            - Path=/api/representantes, /api/representantes/**
+          filters:
+            - StripPrefix=1
 
-# Conexao com o Eureka Server para descoberta dos servicos
+# Conexao com o Eureka Server para descoberta dos servicos e registro do proprio gateway
 eureka:
+  instance:
+    prefer-ip-address: true
   client:
+    register-with-eureka: true
+    fetch-registry: true
     service-url:
       defaultZone: http://localhost:8761/eureka/
 
@@ -26,4 +49,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: health, info, gateway
+        include: prometheus,health,info,gateway
+  metrics:
+    tags:
+      application: ${spring.application.name}

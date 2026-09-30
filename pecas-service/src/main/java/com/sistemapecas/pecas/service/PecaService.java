@@ -4,6 +4,8 @@ import com.sistemapecas.pecas.exception.DuplicateIdentificationException;
 import com.sistemapecas.pecas.exception.ResourceNotFoundException;
 import com.sistemapecas.pecas.model.Peca;
 import com.sistemapecas.pecas.repository.PecaRepository;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,9 +18,13 @@ import java.util.List;
 public class PecaService {
 
     private final PecaRepository pecaRepository;
+    private final Counter pecasCadastradasCounter;
 
-    public PecaService(PecaRepository pecaRepository) {
+    public PecaService(PecaRepository pecaRepository, MeterRegistry meterRegistry) {
         this.pecaRepository = pecaRepository;
+        this.pecasCadastradasCounter = Counter.builder("pecas.cadastradas.total")
+                .description("Total de peças cadastradas com sucesso")
+                .register(meterRegistry);
     }
 
     /**
@@ -56,7 +62,9 @@ public class PecaService {
         peca.setNroIdentificacao(peca.getNroIdentificacao().trim());
         peca.setNome(peca.getNome().trim());
 
-        return pecaRepository.save(peca);
+        Peca pecaSalva = pecaRepository.save(peca);
+        pecasCadastradasCounter.increment();
+        return pecaSalva;
     }
 
     /**

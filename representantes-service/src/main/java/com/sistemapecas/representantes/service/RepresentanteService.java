@@ -4,6 +4,8 @@ import com.sistemapecas.representantes.exception.DuplicateCpfException;
 import com.sistemapecas.representantes.exception.ResourceNotFoundException;
 import com.sistemapecas.representantes.model.Representante;
 import com.sistemapecas.representantes.repository.RepresentanteRepository;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,9 +18,13 @@ import java.util.List;
 public class RepresentanteService {
 
     private final RepresentanteRepository representanteRepository;
+    private final Counter representantesCadastradosCounter;
 
-    public RepresentanteService(RepresentanteRepository representanteRepository) {
+    public RepresentanteService(RepresentanteRepository representanteRepository, MeterRegistry meterRegistry) {
         this.representanteRepository = representanteRepository;
+        this.representantesCadastradosCounter = Counter.builder("representantes.cadastrados.total")
+                .description("Total de representantes cadastrados com sucesso")
+                .register(meterRegistry);
     }
 
     /**
@@ -56,7 +62,9 @@ public class RepresentanteService {
         representante.setCpf(representante.getCpf().trim());
         representante.setNome(representante.getNome().trim());
 
-        return representanteRepository.save(representante);
+        Representante representanteSalvo = representanteRepository.save(representante);
+        representantesCadastradosCounter.increment();
+        return representanteSalvo;
     }
 
     /**

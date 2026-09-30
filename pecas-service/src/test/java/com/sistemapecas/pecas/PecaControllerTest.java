@@ -37,9 +37,30 @@ class PecaControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private io.micrometer.core.instrument.MeterRegistry meterRegistry;
+
     @BeforeEach
     void setUp() {
         pecaRepository.deleteAll();
+    }
+
+    @Test
+    @DisplayName("POST /pecas deve incrementar o contador pecas.cadastradas.total ao cadastrar peça")
+    void cadastrar_pecaValida_deveIncrementarContadorMetrica() throws Exception {
+        // Arrange
+        double countInicial = meterRegistry.get("pecas.cadastradas.total").counter().count();
+        Peca peca = new Peca("PEC-MET-01", "Pastilha Cerâmica", "Pastilha especial");
+
+        // Act
+        mockMvc.perform(post("/pecas")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(peca)))
+                .andExpect(status().isCreated());
+
+        // Assert
+        double countFinal = meterRegistry.get("pecas.cadastradas.total").counter().count();
+        org.hamcrest.MatcherAssert.assertThat(countFinal, is(countInicial + 1.0));
     }
 
     @Test

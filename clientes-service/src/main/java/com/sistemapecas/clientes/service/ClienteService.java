@@ -4,6 +4,8 @@ import com.sistemapecas.clientes.exception.DuplicateCpfException;
 import com.sistemapecas.clientes.exception.ResourceNotFoundException;
 import com.sistemapecas.clientes.model.Cliente;
 import com.sistemapecas.clientes.repository.ClienteRepository;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,9 +18,13 @@ import java.util.List;
 public class ClienteService {
 
     private final ClienteRepository clienteRepository;
+    private final Counter clientesCadastradosCounter;
 
-    public ClienteService(ClienteRepository clienteRepository) {
+    public ClienteService(ClienteRepository clienteRepository, MeterRegistry meterRegistry) {
         this.clienteRepository = clienteRepository;
+        this.clientesCadastradosCounter = Counter.builder("clientes.cadastrados.total")
+                .description("Total de clientes cadastrados com sucesso")
+                .register(meterRegistry);
     }
 
     /**
@@ -56,7 +62,9 @@ public class ClienteService {
         cliente.setCpf(cliente.getCpf().trim());
         cliente.setNome(cliente.getNome().trim());
 
-        return clienteRepository.save(cliente);
+        Cliente clienteSalvo = clienteRepository.save(cliente);
+        clientesCadastradosCounter.increment();
+        return clienteSalvo;
     }
 
     /**

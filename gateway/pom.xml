@@ -39,6 +39,12 @@
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
 
+        <!-- Micrometer Prometheus registry para exportacao de metricas -->
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+        </dependency>
+
         <!-- Suporte a testes automatizados -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

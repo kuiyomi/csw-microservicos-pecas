@@ -37,9 +37,30 @@ class ClienteControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private io.micrometer.core.instrument.MeterRegistry meterRegistry;
+
     @BeforeEach
     void setUp() {
         clienteRepository.deleteAll();
+    }
+
+    @Test
+    @DisplayName("POST /clientes deve incrementar o contador clientes.cadastrados.total ao cadastrar cliente")
+    void cadastrar_clienteValido_deveIncrementarContadorMetrica() throws Exception {
+        // Arrange
+        double countInicial = meterRegistry.get("clientes.cadastrados.total").counter().count();
+        Cliente cliente = new Cliente("99988877766", "Mariana Lima");
+
+        // Act
+        mockMvc.perform(post("/clientes")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(cliente)))
+                .andExpect(status().isCreated());
+
+        // Assert
+        double countFinal = meterRegistry.get("clientes.cadastrados.total").counter().count();
+        org.hamcrest.MatcherAssert.assertThat(countFinal, is(countInicial + 1.0));
     }
 
     @Test
