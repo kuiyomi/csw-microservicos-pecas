@@ -51,3 +51,24 @@ sucesso, campo obrigatório ausente, duplicidade, não encontrado.
 3. Se envolver o gateway: testar sempre via localhost:8080/api/..., nunca direto
    na porta do serviço, já que o requisito do projeto exige acesso só pelo Gateway
 EOF
+## Observabilidade (fase 2 do projeto)
+- Todo microserviço de negócio (pecas, clientes, representantes) e o gateway
+  devem expor métricas via Spring Boot Actuator + Micrometer no formato
+  Prometheus (endpoint /actuator/prometheus).
+- management.endpoints.web.exposure.include deve incluir: prometheus,health,info
+- Prometheus e Grafana rodam como containers Docker (docker-compose.yml na raiz).
+- Prometheus faz scrape de cada serviço via sua porta individual (não via gateway).
+- Métricas customizadas (Counter) devem ser criadas para as operações de
+  cadastro em cada serviço (ex: pecas.cadastradas.total, clientes.cadastrados.total).
+- Grafana deve ter o Prometheus provisionado como datasource automaticamente
+  (não manualmente pela UI) via arquivo de provisionamento.
+
+## Testes e qualidade (fase 3 do projeto)
+- Seguir sempre o padrão Arrange-Act-Assert (AAA) nos testes, com comentários
+  // Arrange, // Act, // Assert.
+- Usar @DisplayName com nomes descritivos em português.
+- Convenção de nome de método: metodoTestado_cenario_comportamentoEsperado
+- Testes de controller: já usamos MockMvc (ver ClienteControllerTest como referência)
+- Mutation testing via PIT (org.pitest:pitest-maven) em cada módulo de negócio,
+  configurado no pom.xml de cada serviço. Meta de mutation coverage: reportar
+  o que for atingido, sem necessidade de 100%.
