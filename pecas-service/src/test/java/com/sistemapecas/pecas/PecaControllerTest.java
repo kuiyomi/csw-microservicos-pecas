@@ -276,6 +276,39 @@ class PecaControllerTest {
                         containsString("Já existe uma peça cadastrada com o número de identificação")));
     }
 
+    @Test
+    @DisplayName("POST /pecas com corpo contendo JSON malformado deve retornar 400 Bad Request")
+    void cadastrar_jsonMalformado_retorna400() throws Exception {
+        // Arrange
+        String jsonInvalido = "{ \"nroIdentificacao\": ";
+
+        // Act
+        ResultActions resultado = mockMvc.perform(post("/pecas")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonInvalido));
+
+        // Assert
+        resultado.andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message", containsString("formato JSON inválido")));
+    }
+
+    @Test
+    @DisplayName("POST /pecas com ID pré-preenchido no corpo deve sobrescrever o ID com valor gerado pelo banco")
+    void cadastrar_comIdInformadoNoCorpo_ignoraIdEAtribuiNovoPeloBanco() throws Exception {
+        // Arrange
+        Peca peca = new Peca(999L, "PEC-NEW-ID", "Peça ID Novo", "Descrição");
+
+        // Act
+        ResultActions resultado = mockMvc.perform(post("/pecas")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(peca)));
+
+        // Assert
+        resultado.andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id").value(not(999)))
+                .andExpect(jsonPath("$.nroIdentificacao").value("PEC-NEW-ID"));
+    }
+
     // -------------------------------------------------------------------------
     // Métricas — Micrometer Counter (pecas.cadastradas.total)
     // -------------------------------------------------------------------------

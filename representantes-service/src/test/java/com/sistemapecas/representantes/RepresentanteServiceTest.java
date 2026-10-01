@@ -76,6 +76,28 @@ class RepresentanteServiceTest {
     }
 
     @Test
+    @DisplayName("Deve redefinir o ID para null antes de salvar caso o objeto já possua ID preenchido")
+    void cadastrar_quandoObjetoPossuiIdPreenchido_redefineIdParaNull() {
+        // Arrange
+        Representante repComId = new Representante("12345678901", "Juliana Mendes");
+        repComId.setId(999L);
+        when(representanteRepository.existsByCpf("12345678901")).thenReturn(false);
+        when(representanteRepository.save(any(Representante.class))).thenAnswer(invocation -> {
+            Representante r = invocation.getArgument(0);
+            assertNull(r.getId(), "O ID deve ser redefinido para null antes de salvar no banco");
+            r.setId(10L);
+            return r;
+        });
+
+        // Act
+        Representante salvo = representanteService.cadastrar(repComId);
+
+        // Assert
+        assertEquals(10L, salvo.getId());
+        verify(representanteRepository, times(1)).save(any(Representante.class));
+    }
+
+    @Test
     @DisplayName("Deve lançar IllegalArgumentException quando o objeto representante for nulo")
     void cadastrar_quandoObjetoRepresentanteNulo_lancaIllegalArgumentException() {
         // Arrange

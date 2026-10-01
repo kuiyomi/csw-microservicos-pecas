@@ -76,6 +76,28 @@ class PecaServiceTest {
     }
 
     @Test
+    @DisplayName("Deve redefinir o ID para null antes de salvar caso o objeto já possua ID preenchido")
+    void cadastrar_quandoObjetoPossuiIdPreenchido_redefineIdParaNull() {
+        // Arrange
+        Peca pecaComId = new Peca("PEC-ID-01", "Amortecedor", "Desc");
+        pecaComId.setId(999L);
+        when(pecaRepository.existsByNroIdentificacao("PEC-ID-01")).thenReturn(false);
+        when(pecaRepository.save(any(Peca.class))).thenAnswer(invocation -> {
+            Peca p = invocation.getArgument(0);
+            assertNull(p.getId(), "O ID deve ser redefinido para null antes de salvar no banco");
+            p.setId(10L);
+            return p;
+        });
+
+        // Act
+        Peca salva = pecaService.cadastrar(pecaComId);
+
+        // Assert
+        assertEquals(10L, salva.getId());
+        verify(pecaRepository, times(1)).save(any(Peca.class));
+    }
+
+    @Test
     @DisplayName("Deve lançar IllegalArgumentException quando o objeto peça for nulo")
     void cadastrar_quandoObjetoPecaNulo_lancaIllegalArgumentException() {
         // Arrange

@@ -76,6 +76,28 @@ class ClienteServiceTest {
     }
 
     @Test
+    @DisplayName("Deve redefinir o ID para null antes de salvar caso o objeto já possua ID preenchido")
+    void cadastrar_quandoObjetoPossuiIdPreenchido_redefineIdParaNull() {
+        // Arrange
+        Cliente clienteComId = new Cliente("12345678901", "Lucas Pereira");
+        clienteComId.setId(999L);
+        when(clienteRepository.existsByCpf("12345678901")).thenReturn(false);
+        when(clienteRepository.save(any(Cliente.class))).thenAnswer(invocation -> {
+            Cliente c = invocation.getArgument(0);
+            assertNull(c.getId(), "O ID deve ser redefinido para null antes de salvar no banco");
+            c.setId(10L);
+            return c;
+        });
+
+        // Act
+        Cliente salvo = clienteService.cadastrar(clienteComId);
+
+        // Assert
+        assertEquals(10L, salvo.getId());
+        verify(clienteRepository, times(1)).save(any(Cliente.class));
+    }
+
+    @Test
     @DisplayName("Deve lançar IllegalArgumentException quando o objeto cliente for nulo")
     void cadastrar_quandoObjetoClienteNulo_lancaIllegalArgumentException() {
         // Arrange

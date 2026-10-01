@@ -275,6 +275,39 @@ class RepresentanteControllerTest {
                         containsString("Já existe um representante cadastrado com o CPF")));
     }
 
+    @Test
+    @DisplayName("POST /representantes com corpo contendo JSON malformado deve retornar 400 Bad Request")
+    void cadastrar_jsonMalformado_retorna400() throws Exception {
+        // Arrange
+        String jsonInvalido = "{ \"cpf\": ";
+
+        // Act
+        ResultActions resultado = mockMvc.perform(post("/representantes")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonInvalido));
+
+        // Assert
+        resultado.andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message", containsString("formato JSON inválido")));
+    }
+
+    @Test
+    @DisplayName("POST /representantes com ID pré-preenchido no corpo deve sobrescrever o ID com valor gerado pelo banco")
+    void cadastrar_comIdInformadoNoCorpo_ignoraIdEAtribuiNovoPeloBanco() throws Exception {
+        // Arrange
+        Representante rep = new Representante(999L, "99911122233", "Representante ID Novo");
+
+        // Act
+        ResultActions resultado = mockMvc.perform(post("/representantes")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(rep)));
+
+        // Assert
+        resultado.andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id").value(not(999)))
+                .andExpect(jsonPath("$.cpf").value("99911122233"));
+    }
+
     // -------------------------------------------------------------------------
     // Métricas — Micrometer Counter (representantes.cadastrados.total)
     // -------------------------------------------------------------------------
